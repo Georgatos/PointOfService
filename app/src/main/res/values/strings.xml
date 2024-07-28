@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PointOfService</string>
+    <string name="login_form">Login Form\n\n</string>
+</resources>
