@@ -1,6 +1,5 @@
 package dev.andreasgeorgatos.pointofservice.loginform
 
-import VolleySingleton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,17 +21,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
+import com.google.gson.GsonBuilder
 import dev.andreasgeorgatos.pointofservice.LOGIN_ROUTE
-import dev.andreasgeorgatos.pointofservice.VERIFY_EMAIL_ROUTE
+import dev.andreasgeorgatos.pointofservice.data.dto.VerificationDTO
+import dev.andreasgeorgatos.pointofservice.data.responses.VerifyAccountResponse
+import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
 import dev.andreasgeorgatos.pointofservice.utils.Validator
-import org.json.JSONObject
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
 
 @Composable
 fun VerifyEmailScreen(email: String, navController: NavController) {
 
-    var UUID by remember { mutableStateOf("") }
+    var verificationCode by remember { mutableStateOf("") }
     var showAlertDialog by remember { mutableStateOf(false) }
     var alertMessage by remember { mutableStateOf("") }
 
@@ -40,7 +43,7 @@ fun VerifyEmailScreen(email: String, navController: NavController) {
         val messages = mutableListOf<String>()
         var isValid = true
 
-        if (!Validator.isUUIDValid(UUID)) {
+        if (!Validator.isUUIDValid(verificationCode)) {
             messages.add("The verification code isn't correct")
             isValid = false
         }
@@ -60,8 +63,8 @@ fun VerifyEmailScreen(email: String, navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = UUID,
-            onValueChange = { UUID = it },
+            value = verificationCode,
+            onValueChange = { verificationCode = it },
             label = { Text(text = "Verification code") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -70,23 +73,25 @@ fun VerifyEmailScreen(email: String, navController: NavController) {
 
         Button(onClick = {
             if (validateForm()) {
-                val url = "http://10.0.2.2:8080/api/v1/users/verify"
-                val params = HashMap<String, String>()
-                params["email"] = email
-                params["uuid"] = UUID
+                val apiService = RetrofitClient.userService
 
-                val jsonObjectRequest = JsonObjectRequest(Request.Method.POST,
-                    url,
-                    JSONObject(params as Map<*, *>),
-                    { response ->
-                        println("Verification successful: $response")
+                val verificationDTO: VerificationDTO = VerificationDTO(email, verificationCode)
+
+                val call: Call<VerifyAccountResponse> = apiService.verifyUser(verificationDTO)
+
+                call.enqueue(object : Callback<VerifyAccountResponse> {
+                    override fun onResponse(
+                        call: Call<VerifyAccountResponse>,
+                        response: retrofit2.Response<VerifyAccountResponse>
+                    ) {
                         navController.navigate(LOGIN_ROUTE)
-                    },
-                    { error ->
-                        println("Verification error: ${error.message}")
-                    })
+                    }
 
-                VolleySingleton.getRequestQueue().add(jsonObjectRequest)
+                    override fun onFailure(call: Call<VerifyAccountResponse>, t: Throwable) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
 
             } else {
                 showAlertDialog = true

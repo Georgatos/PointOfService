@@ -50,6 +50,11 @@ android {
 }
 
 dependencies {
+    implementation(libs.retrofit)
+    implementation (libs.okhttp)
+    implementation(libs.converter.gson)
+    implementation (libs.logging.interceptor)
+    implementation (libs.gson)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.volley)
     implementation(libs.androidx.core.ktx)
@@ -63,6 +68,7 @@ dependencies {
     implementation(libs.protolite.well.known.types)
     implementation(libs.places)
     implementation(libs.androidx.core.i18n)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
