@@ -1,14 +1,14 @@
 import dev.andreasgeorgatos.pointofservice.data.dto.CredentialsDTO
+import dev.andreasgeorgatos.pointofservice.data.dto.EmailDTO
+import dev.andreasgeorgatos.pointofservice.data.dto.ResetPasswordDTO
 import dev.andreasgeorgatos.pointofservice.data.dto.UserDTO
 import dev.andreasgeorgatos.pointofservice.data.dto.VerificationDTO
 import dev.andreasgeorgatos.pointofservice.data.responses.LoginResponse
 import dev.andreasgeorgatos.pointofservice.data.responses.RegisterResponse
 import dev.andreasgeorgatos.pointofservice.data.responses.VerifyAccountResponse
-import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 
@@ -25,4 +25,10 @@ interface UserService {
 
     @POST("users/verify")
     fun verifyUser(@Body verificationDTO: VerificationDTO): Call<VerifyAccountResponse>
+
+    @POST("users/forgotPassword")
+    fun forgotPassword(@Body emailDTO: EmailDTO): Call<Void>
+
+    @POST("users/resetPassword")
+    fun resetPassword(@Body resetPasswordDTO: ResetPasswordDTO): Call<Void>
 }

@@ -1,4 +1,4 @@
-package dev.andreasgeorgatos.pointofservice.loginform.registerform
+package dev.andreasgeorgatos.pointofservice.forms.credentials.registerform
 
 import dev.andreasgeorgatos.pointofservice.data.ValidationError
 import dev.andreasgeorgatos.pointofservice.utils.Validator

@@ -1,4 +1,4 @@
-package dev.andreasgeorgatos.pointofservice.loginform.registerform
+package dev.andreasgeorgatos.pointofservice.forms.credentials.registerform
 
 import android.os.Build
 import androidx.annotation.RequiresApi

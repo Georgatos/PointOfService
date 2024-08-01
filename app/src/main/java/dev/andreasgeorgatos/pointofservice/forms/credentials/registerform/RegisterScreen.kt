@@ -1,4 +1,4 @@
-package dev.andreasgeorgatos.pointofservice.loginform
+package dev.andreasgeorgatos.pointofservice.forms.credentials.registerform
 
 import android.app.DatePickerDialog
 import android.content.Context
@@ -33,9 +33,7 @@ import dev.andreasgeorgatos.pointofservice.VERIFY_EMAIL_ROUTE
 import dev.andreasgeorgatos.pointofservice.data.ValidationError
 import dev.andreasgeorgatos.pointofservice.data.dto.UserDTO
 import dev.andreasgeorgatos.pointofservice.data.responses.RegisterResponse
-import dev.andreasgeorgatos.pointofservice.loginform.registerform.FormValidator
-import dev.andreasgeorgatos.pointofservice.loginform.registerform.TextInputField
-import dev.andreasgeorgatos.pointofservice.loginform.registerform.UserRepository
+import dev.andreasgeorgatos.pointofservice.forms.TextInputField
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
