@@ -1,58 +1,79 @@
-package dev.andreasgeorgatos.pointofservice.forms.credentials.registerform
+package dev.andreasgeorgatos.pointofservice.forms.credentials
 
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import dev.andreasgeorgatos.pointofservice.data.ValidationError
 import dev.andreasgeorgatos.pointofservice.utils.Validator
 
 object FormValidator {
-    fun validate(
-        firstName: String,
-        lastName: String,
-        email: String,
-        password: String,
-        phoneNumber: String,
-        city: String,
-        address: String,
-        addressNumber: String,
-        storyLevel: String,
-        postalCode: String,
-        doorRingBellName: String,
-    ): List<ValidationError> {
+    fun validate(fields: Map<String, String>): List<ValidationError> {
         val errors = mutableListOf<ValidationError>()
 
-        if (!Validator.isNameValid(firstName)) {
-            errors.add(ValidationError("First Name", "First name is required."))
-        }
-        if (!Validator.isNameValid(lastName)) {
-            errors.add(ValidationError("Last Name", "Last name is required."))
-        }
-        if (!Validator.isEmailValid(email)) {
-            errors.add(ValidationError("E-mail", "The E-mail is required."))
-        }
-        if (!Validator.isPasswordValid(password)) {
-            errors.add(ValidationError("Password", "The password is required."))
-        }
-        if (!Validator.isPhoneNumberValid(phoneNumber)) {
-            errors.add(ValidationError("Phone Number", "The Phone Number is required."))
-        }
-        if (!Validator.isCityValid(city)) {
-            errors.add(ValidationError("City", "The City is required."))
-        }
-        if (!Validator.isAddressValid(address)) {
-            errors.add(ValidationError("Address", "The address is required."))
-        }
-        if (!Validator.isAddressNumberValid(addressNumber)) {
-            errors.add(ValidationError("Address Number", "The Address Number is required."))
-        }
-        if (!Validator.isStoryLevelValid(storyLevel)) {
-            errors.add(ValidationError("Story Level", "The Story Level is required."))
-        }
-        if (!Validator.isPostalCodeValid(postalCode)) {
-            errors.add(ValidationError("Postal Code", "The Postal Code is required."))
-        }
-        if (!Validator.isDoorRingBellNameValid(doorRingBellName)) {
-            errors.add(ValidationError("Door Ring", "The Door Ring is required."))
+        fields.forEach { (field, value) ->
+            when (field) {
+                "First Name", "Last Name" -> if (!Validator.isNameValid(value)) {
+                    errors.add(ValidationError(field, "$field is required."))
+                }
+                "E-mail" -> if (!Validator.isEmailValid(value)) {
+                    errors.add(ValidationError(field, "The $field is required."))
+                }
+                "Password" -> if (!Validator.isPasswordValid(value)) {
+                    errors.add(ValidationError(field, "The $field is required and must be 9 characters long at least."))
+                }
+                "Phone Number" -> if (!Validator.isPhoneNumberValid(value)) {
+                    errors.add(ValidationError(field, "The $field is required."))
+                }
+                "City" -> if (!Validator.isCityValid(value)) {
+                    errors.add(ValidationError(field, "The $field is required."))
+                }
+                "Address" -> if (!Validator.isAddressValid(value)) {
+                    errors.add(ValidationError(field, "The $field is required."))
+                }
+                "Address Number" -> if (!Validator.isAddressNumberValid(value)) {
+                    errors.add(ValidationError(field, "The $field is required."))
+                }
+                "Story Level" -> if (!Validator.isStoryLevelValid(value)) {
+                    errors.add(ValidationError(field, "The $field is required."))
+                }
+                "Postal Code" -> if (!Validator.isPostalCodeValid(value)) {
+                    errors.add(ValidationError(field, "The $field is required."))
+                }
+                "Door Ring" -> if (!Validator.isDoorRingBellNameValid(value)) {
+                    errors.add(ValidationError(field, "The $field is required."))
+                }
+                "Verification Code" -> if (!Validator.isUUIDValid(value)) {
+                    errors.add(ValidationError(field, "The $field isn't correct"))
+                }
+            }
         }
 
         return errors
     }
+
+    fun errorsToString(errors: List<ValidationError>): String {
+        return errors.joinToString("\n") { "${it.field}: ${it.message}" }
+    }
 }
+
+@Composable
+fun ValidationAlertDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit,
+    message: String
+) {
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            confirmButton = {
+                TextButton(onClick = onDismiss) {
+                    Text("OK")
+                }
+            },
+            title = { Text("Validation Errors") },
+            text = { Text(message) }
+        )
+    }
+}
+

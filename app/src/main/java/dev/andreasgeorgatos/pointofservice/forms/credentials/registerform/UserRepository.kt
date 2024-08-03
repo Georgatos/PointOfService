@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializer
 import dev.andreasgeorgatos.pointofservice.data.dto.UserDTO
-import dev.andreasgeorgatos.pointofservice.data.responses.RegisterResponse
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -17,7 +16,7 @@ import java.time.format.DateTimeFormatter
 object UserRepository {
     @RequiresApi(Build.VERSION_CODES.O)
 
-    fun registerUser(user: UserDTO): Call<RegisterResponse> {
+    fun registerUser(user: UserDTO): Call<Void> {
         val gson = GsonBuilder().registerTypeAdapter(
             LocalDate::class.java,
             JsonSerializer<LocalDate> { src, _, _ ->

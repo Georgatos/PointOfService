@@ -1,6 +1,5 @@
 package dev.andreasgeorgatos.pointofservice.forms.credentials
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,11 +24,19 @@ import dev.andreasgeorgatos.pointofservice.FORGOT_PASSWORD_ROUTE
 import dev.andreasgeorgatos.pointofservice.REGISTER_ROUTE
 import dev.andreasgeorgatos.pointofservice.forms.TextInputField
 
-
 @Composable
 fun LoginScreen(navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var showAlertDialog by remember { mutableStateOf(false) }
+    var alertMessage by remember { mutableStateOf("") }
+
+    fun validateForm(): Boolean {
+        val fields = mapOf("E-mail" to email, "Password" to password)
+        val errors = FormValidator.validate(fields)
+        alertMessage = FormValidator.errorsToString(errors)
+        return errors.isEmpty()
+    }
 
     Column(
         modifier = Modifier
@@ -62,7 +69,13 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = {
+            if (validateForm()) {
+                // Proceed with login logic
+            } else {
+                showAlertDialog = true
+            }
+        }) {
             Text(text = "Login")
         }
 
@@ -76,4 +89,10 @@ fun LoginScreen(navController: NavController) {
             Text("Forgot Password")
         }
     }
+
+    ValidationAlertDialog(
+        showDialog = showAlertDialog,
+        onDismiss = { showAlertDialog = false },
+        message = alertMessage
+    )
 }

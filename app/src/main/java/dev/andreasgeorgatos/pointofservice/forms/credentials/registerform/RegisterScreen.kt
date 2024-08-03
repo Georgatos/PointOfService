@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,14 +25,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializer
 import dev.andreasgeorgatos.pointofservice.LOGIN_ROUTE
 import dev.andreasgeorgatos.pointofservice.VERIFY_EMAIL_ROUTE
-import dev.andreasgeorgatos.pointofservice.data.ValidationError
 import dev.andreasgeorgatos.pointofservice.data.dto.UserDTO
-import dev.andreasgeorgatos.pointofservice.data.responses.RegisterResponse
 import dev.andreasgeorgatos.pointofservice.forms.TextInputField
+import dev.andreasgeorgatos.pointofservice.forms.credentials.FormValidator
+import dev.andreasgeorgatos.pointofservice.forms.credentials.ValidationAlertDialog
+import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,17 +69,35 @@ fun RegisterScreen(navController: NavController) {
     val (birthDate, setBirthDate) = remember { mutableStateOf(LocalDate.now()) }
     var showDatePicker by remember { mutableStateOf(false) }
 
-    var validationErrors by remember { mutableStateOf<List<ValidationError>>(emptyList()) }
-    var showDialog by remember { mutableStateOf(false) }
+    var showAlertDialog by remember { mutableStateOf(false) }
+    var alertMessage by remember { mutableStateOf("") }
 
     fun validateForm(): Boolean {
-        validationErrors = FormValidator.validate(
-            firstName, lastName, email, password, phoneNumber, city, address,
-            addressNumber, storyLevel, postalCode, doorRingBellName
+        val fields = mapOf(
+            "First Name" to firstName,
+            "Last Name" to lastName,
+            "E-mail" to email,
+            "Password" to password,
+            "Phone Number" to phoneNumber,
+            "City" to city,
+            "Address" to address,
+            "Address Number" to addressNumber,
+            "Story Level" to storyLevel,
+            "Postal Code" to postalCode,
+            "Door Ring" to doorRingBellName
         )
-        showDialog = validationErrors.isNotEmpty()
-        return validationErrors.isEmpty()
+        val errors = FormValidator.validate(fields)
+
+        if (errors.isNotEmpty()) {
+            alertMessage = FormValidator.errorsToString(errors)
+            Log.d("RegisterScreen", "Validation errors: $alertMessage")
+            return false
+        }
+
+        Log.d("RegisterScreen", "Form validation passed")
+        return true
     }
+
 
     fun showDatePicker() {
         val calendar = Calendar.getInstance()
@@ -95,7 +120,6 @@ fun RegisterScreen(navController: NavController) {
             .padding(16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
         Text(
             text = "Register an account", style = MaterialTheme.typography.headlineSmall
@@ -131,6 +155,7 @@ fun RegisterScreen(navController: NavController) {
             TextInputField(
                 value = password,
                 onValueChange = setPassword,
+                visualTransformation = PasswordVisualTransformation(),
                 label = "Password",
                 modifier = Modifier.weight(1f)
             )
@@ -205,21 +230,6 @@ fun RegisterScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text("Validation Errors") },
-                text = {
-                    Text(validationErrors.joinToString("\n") { "${it.field}: ${it.message}" })
-                },
-                confirmButton = {
-                    Button(onClick = { showDialog = false }) {
-                        Text("OK")
-                    }
-                }
-            )
-        }
-
         Button(onClick = {
             if (validateForm()) {
                 val user = UserDTO(
@@ -237,36 +247,79 @@ fun RegisterScreen(navController: NavController) {
                     birthDate = birthDate
                 )
 
-                UserRepository.registerUser(user).enqueue(object : Callback<RegisterResponse> {
-                    override fun onResponse(
-                        call: Call<RegisterResponse>,
-                        response: Response<RegisterResponse>
-                    ) {
-                        if (response.body() != null && response.isSuccessful) {
-                            val registerResponse =
-                                RegisterResponse(true, "Registration successful", user)
-                            validationErrors = emptyList()
-                            showDialog = false
-                            Log.d("RegisterScreen", "Registration successful: $registerResponse")
-                            navController.navigate("$VERIFY_EMAIL_ROUTE/$email")
-                        } else {
-                            val registerResponse = RegisterResponse(false, response.message(), null)
-                            Log.e("RegisterScreen", "Registration Error: $registerResponse")
-                        }
-                    }
+                val gson = GsonBuilder()
+                    .registerTypeAdapter(
+                        LocalDate::class.java,
+                        JsonSerializer<LocalDate> { src, _, _ ->
+                            JsonPrimitive(
+                                src.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                            )
+                        })
+                    .registerTypeAdapter(
+                        LocalDate::class.java,
+                        JsonDeserializer { json, _, _ ->
+                            LocalDate.parse(
+                                json.asString,
+                                DateTimeFormatter.ISO_LOCAL_DATE
+                            )
+                        })
+                    .create()
 
-                    override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                        Log.e("RegisterScreen", "Registration Failure: ${t.message}")
-                    }
-                })
+                val json = gson.toJson(user)
+                Log.d("RegisterScreen", "BirthDate: $birthDate")
+                Log.d("RegisterScreen", "JSON payload: $json")
+                val requestBody = json.toRequestBody("application/json".toMediaTypeOrNull())
+
+                RetrofitClient.userService.registerUser(requestBody)
+                    .enqueue(object : Callback<Void> {
+                        override fun onResponse(
+                            call: Call<Void>,
+                            response: Response<Void>
+                        ) {
+                            Log.d("RegisterScreen", "Response code: ${response.code()}")
+                            Log.d("RegisterScreen", "Response body: ${response.body()}")
+
+
+                            if (response.isSuccessful) {
+                                Log.d(
+                                    "RegisterScreen",
+                                    "Registration successful: ${response.body()}"
+                                )
+                                navController.navigate("$VERIFY_EMAIL_ROUTE/$email")
+                            } else {
+                                val errorResponse = response.errorBody()?.string()
+                                    ?: "Unknown error"
+                                alertMessage = errorResponse
+                                showAlertDialog = true
+                                Log.d("RegisterScreen", "Registration failed: $errorResponse")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.e("RegisterScreen", "Registration Failure: ${t.message}")
+                            alertMessage = "Registration failed: ${t.message}"
+                            showAlertDialog = true
+                        }
+                    })
+            } else {
+                showAlertDialog = true
             }
         }) {
             Text(text = "Register")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Button(onClick = {
             navController.navigate(LOGIN_ROUTE)
         }) {
             Text(text = "Login")
         }
     }
+
+    ValidationAlertDialog(
+        showDialog = showAlertDialog,
+        onDismiss = { showAlertDialog = false },
+        message = alertMessage
+    )
 }

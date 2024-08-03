@@ -16,7 +16,7 @@ class HeaderInterceptor : Interceptor {
         val request = chain.request()
         var url = request.url.toString()
 
-        if (url.contains("/register") || url.contains("/login")) {
+        if (url.contains("/register") || url.contains("/login") || url.contains("/forgotPassword") || url.contains("/resetPassword")) {
             val response = chain.proceed(request)
             val headers = response.headers
 

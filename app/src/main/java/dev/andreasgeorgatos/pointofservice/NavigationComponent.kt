@@ -1,5 +1,6 @@
 package dev.andreasgeorgatos.pointofservice
 
+import VerifyEmailScreen
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
@@ -10,7 +11,6 @@ import androidx.navigation.navArgument
 import dev.andreasgeorgatos.pointofservice.forms.credentials.resetpassword.ForgotPasswordScreen
 import dev.andreasgeorgatos.pointofservice.forms.credentials.LoginScreen
 import dev.andreasgeorgatos.pointofservice.forms.credentials.registerform.RegisterScreen
-import dev.andreasgeorgatos.pointofservice.forms.credentials.VerifyEmailScreen
 import dev.andreasgeorgatos.pointofservice.forms.credentials.resetpassword.ResetPasswordScreen
 
 const val LOGIN_ROUTE = "login"

@@ -22,10 +22,11 @@ import dev.andreasgeorgatos.pointofservice.LOGIN_ROUTE
 import dev.andreasgeorgatos.pointofservice.data.dto.ResetPasswordDTO
 import dev.andreasgeorgatos.pointofservice.forms.TextInputField
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
+import dev.andreasgeorgatos.pointofservice.forms.credentials.ValidationAlertDialog
+import dev.andreasgeorgatos.pointofservice.forms.credentials.FormValidator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 @Composable
 fun ResetPasswordScreen(navController: NavController) {
@@ -34,6 +35,21 @@ fun ResetPasswordScreen(navController: NavController) {
     val (password, setPassword) = remember { mutableStateOf("") }
     val (confirmPassword, setConfirmPassword) = remember { mutableStateOf("") }
     val (token, setToken) = remember { mutableStateOf("") }
+    val (showAlertDialog, setShowAlertDialog) = remember { mutableStateOf(false) }
+    val (alertMessage, setAlertMessage) = remember { mutableStateOf("") }
+
+    fun validateForm(): Boolean {
+        val fields = mapOf(
+            "Email" to email,
+            "Password" to password,
+            "Confirm Password" to confirmPassword,
+            "Token" to token
+        )
+
+        val errors = FormValidator.validate(fields)
+        setAlertMessage(FormValidator.errorsToString(errors))
+        return errors.isEmpty()
+    }
 
     Column(
         modifier = Modifier
@@ -91,32 +107,27 @@ fun ResetPasswordScreen(navController: NavController) {
 
         Button(
             onClick = {
+                if (validateForm()) {
+                    val resetPasswordDTO = ResetPasswordDTO(email, password, confirmPassword, token)
 
-                val resetPasswordDTO: ResetPasswordDTO =
-                    ResetPasswordDTO(email, password, confirmPassword, token)
-
-                RetrofitClient.userService.resetPassword(resetPasswordDTO)
-                    .enqueue(object : Callback<Void> {
-                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            if (response.isSuccessful) {
-                                Log.d(
-                                    "RESET PASSWORD",
-                                    "Password has been reset"
-                                )
-                                navController.navigate(LOGIN_ROUTE)
-                            } else {
-                                Log.d(
-                                    "RESET PASSWORD",
-                                    "Password has not been reset"
-                                )
-
+                    RetrofitClient.userService.resetPassword(resetPasswordDTO)
+                        .enqueue(object : Callback<Void> {
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                if (response.isSuccessful) {
+                                    Log.d("RESET PASSWORD", "Password has been reset")
+                                    navController.navigate(LOGIN_ROUTE)
+                                } else {
+                                    Log.d("RESET PASSWORD", "Password has not been reset")
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Log.d("RESET PASSWORD", "Password reset went wrong: $t")
-                        }
-                    })
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                Log.d("RESET PASSWORD", "Password reset went wrong: $t")
+                            }
+                        })
+                } else {
+                    setShowAlertDialog(true)
+                }
             },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -125,4 +136,10 @@ fun ResetPasswordScreen(navController: NavController) {
             Text("Reset Password")
         }
     }
+
+    ValidationAlertDialog(
+        showDialog = showAlertDialog,
+        onDismiss = { setShowAlertDialog(false) },
+        message = alertMessage
+    )
 }
