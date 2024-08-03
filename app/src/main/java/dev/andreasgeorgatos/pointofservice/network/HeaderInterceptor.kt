@@ -23,7 +23,6 @@ class HeaderInterceptor : Interceptor {
             if (headers["Authorization"] != null) {
                 var authInfo: String = headers["Authorization"]?.removePrefix("Bearer ") ?: ""
                 authorizationInfo.set(authInfo)
-                Log.d(headers["HeaderInterceptor:[Authorization"].toString(), authInfo)
             }
             return response
         } else {

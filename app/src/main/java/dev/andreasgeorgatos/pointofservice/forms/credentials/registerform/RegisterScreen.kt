@@ -80,11 +80,9 @@ fun RegisterScreen(navController: NavController) {
 
         if (errors.isNotEmpty()) {
             alertMessage = FormValidator.errorsToString(errors)
-            Log.d("RegisterScreen", "Validation errors: $alertMessage")
             return false
         }
 
-        Log.d("RegisterScreen", "Form validation passed")
         return true
     }
 
@@ -269,8 +267,6 @@ fun RegisterScreen(navController: NavController) {
                     .create()
 
                 val json = gson.toJson(user)
-                Log.d("RegisterScreen", "BirthDate: $birthDate")
-                Log.d("RegisterScreen", "JSON payload: $json")
                 val requestBody = json.toRequestBody("application/json".toMediaTypeOrNull())
 
                 RetrofitClient.userService.registerUser(requestBody)
@@ -279,26 +275,18 @@ fun RegisterScreen(navController: NavController) {
                             call: Call<Void>,
                             response: Response<Void>
                         ) {
-                            Log.d("RegisterScreen", "Response code: ${response.code()}")
-                            Log.d("RegisterScreen", "Response body: ${response.body()}")
-
                             if (response.isSuccessful) {
-                                Log.d(
-                                    "RegisterScreen",
-                                    "Registration successful: ${response.body()}"
-                                )
+
                                 navController.navigate("$VERIFY_EMAIL_ROUTE/$email")
                             } else {
                                 val errorResponse = response.errorBody()?.string()
                                     ?: "Unknown error"
                                 alertMessage = errorResponse
                                 showAlertDialog = true
-                                Log.d("RegisterScreen", "Registration failed: $errorResponse")
                             }
                         }
 
                         override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Log.e("RegisterScreen", "Registration Failure: ${t.message}")
                             alertMessage = "Registration failed: ${t.message}"
                             showAlertDialog = true
                         }

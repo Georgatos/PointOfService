@@ -1,6 +1,5 @@
 package dev.andreasgeorgatos.pointofservice.forms.credentials.resetpassword
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import dev.andreasgeorgatos.pointofservice.RESET_PASSWORD
+import dev.andreasgeorgatos.pointofservice.RESET_PASSWORD_ROUTE
 import dev.andreasgeorgatos.pointofservice.data.dto.EmailDTO
 import dev.andreasgeorgatos.pointofservice.forms.TextInputField
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
@@ -67,16 +66,12 @@ fun ForgotPasswordScreen(navController: NavController) {
                     .enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
-                                Log.d("ForgotPasswordScreen", "Password reset email sent successfully")
-                                navController.navigate(RESET_PASSWORD)
-                            } else {
-                                Log.d("ForgotPasswordScreen", "Password reset email failed to send")
+                                navController.navigate(RESET_PASSWORD_ROUTE)
                             }
+
                         }
 
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Log.d("ForgotPasswordScreen", "error ${t.message}")
-                        }
+                        override fun onFailure(call: Call<Void>, t: Throwable) {}
                     })
             } else {
                 setShowAlertDialog(true)

@@ -22,7 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import dev.andreasgeorgatos.pointofservice.FORGOT_PASSWORD_ROUTE
 import dev.andreasgeorgatos.pointofservice.REGISTER_ROUTE
+import dev.andreasgeorgatos.pointofservice.data.dto.CredentialsDTO
 import dev.andreasgeorgatos.pointofservice.forms.TextInputField
+import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -32,7 +37,7 @@ fun LoginScreen(navController: NavController) {
     var alertMessage by remember { mutableStateOf("") }
 
     fun validateForm(): Boolean {
-        val fields = mapOf("E-mail" to userName, "Password" to password)
+        val fields = mapOf(userName to userName, "Password" to password)
         val errors = FormValidator.validate(fields)
         alertMessage = FormValidator.errorsToString(errors)
         return errors.isEmpty()
@@ -71,7 +76,18 @@ fun LoginScreen(navController: NavController) {
 
         Button(onClick = {
             if (validateForm()) {
-                // Proceed with login logic
+                RetrofitClient.userService.loginUser(CredentialsDTO(userName, password))
+                    .enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) {
+                                navController.navigate("main_screen")
+                            } else {
+
+                            }
+                        }
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                        }
+                    })
             } else {
                 showAlertDialog = true
             }
