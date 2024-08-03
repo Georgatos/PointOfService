@@ -26,13 +26,13 @@ import dev.andreasgeorgatos.pointofservice.forms.TextInputField
 
 @Composable
 fun LoginScreen(navController: NavController) {
-    var email by remember { mutableStateOf("") }
+    var userName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showAlertDialog by remember { mutableStateOf(false) }
     var alertMessage by remember { mutableStateOf("") }
 
     fun validateForm(): Boolean {
-        val fields = mapOf("E-mail" to email, "Password" to password)
+        val fields = mapOf("E-mail" to userName, "Password" to password)
         val errors = FormValidator.validate(fields)
         alertMessage = FormValidator.errorsToString(errors)
         return errors.isEmpty()
@@ -51,9 +51,9 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(32.dp))
 
         TextInputField(
-            value = email,
-            onValueChange = { email = it },
-            label = "Email",
+            value = userName,
+            onValueChange = { userName = it },
+            label = "user name",
             modifier = Modifier.fillMaxWidth()
         )
 

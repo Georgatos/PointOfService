@@ -6,22 +6,11 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -58,6 +47,7 @@ fun RegisterScreen(navController: NavController) {
     val (firstName, setFirstName) = remember { mutableStateOf("") }
     val (lastName, setLastName) = remember { mutableStateOf("") }
     val (password, setPassword) = remember { mutableStateOf("") }
+    val (userName, setUserName) = remember { mutableStateOf("")}
     val (email, setEmail) = remember { mutableStateOf("") }
     val (city, setCity) = remember { mutableStateOf("") }
     val (address, setAddress) = remember { mutableStateOf("") }
@@ -97,7 +87,6 @@ fun RegisterScreen(navController: NavController) {
         Log.d("RegisterScreen", "Form validation passed")
         return true
     }
-
 
     fun showDatePicker() {
         val calendar = Calendar.getInstance()
@@ -164,20 +153,19 @@ fun RegisterScreen(navController: NavController) {
         Row(
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+
+            TextInputField(
+                value = userName,
+                onValueChange = setUserName,
+                label = "user name",
+                modifier = Modifier.weight(1f)
+            )
+
             TextInputField(
                 value = phoneNumber,
                 onValueChange = setPhoneNumber,
                 label = "Phone",
                 modifier = Modifier.weight(1f)
-            )
-            TextInputField(
-                value = birthDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                onValueChange = { },
-                label = "Birth Date",
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable { showDatePicker() },
-                readOnly = true
             )
         }
 
@@ -221,12 +209,26 @@ fun RegisterScreen(navController: NavController) {
             )
         }
 
-        TextInputField(
-            value = doorRingBellName,
-            onValueChange = setDoorRingBellName,
-            label = "Doorbell Name",
-            modifier = Modifier.fillMaxWidth()
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            TextInputField(
+                value = doorRingBellName,
+                onValueChange = setDoorRingBellName,
+                label = "Doorbell Name",
+                modifier = Modifier.weight(1f)
+            )
+
+            TextInputField(
+                value = birthDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                onValueChange = { /* no-op */ },
+                label = "Birth Date",
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { showDatePicker() },
+                readOnly = true
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -236,6 +238,7 @@ fun RegisterScreen(navController: NavController) {
                     firstName = firstName,
                     lastName = lastName,
                     password = password,
+                    userName = userName,
                     email = email,
                     city = city,
                     address = address,
@@ -278,7 +281,6 @@ fun RegisterScreen(navController: NavController) {
                         ) {
                             Log.d("RegisterScreen", "Response code: ${response.code()}")
                             Log.d("RegisterScreen", "Response body: ${response.body()}")
-
 
                             if (response.isSuccessful) {
                                 Log.d(
