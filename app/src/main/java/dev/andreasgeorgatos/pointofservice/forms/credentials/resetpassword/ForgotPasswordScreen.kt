@@ -30,8 +30,8 @@ import retrofit2.Response
 fun ForgotPasswordScreen(navController: NavController) {
 
     val (email, setEmail) = remember { mutableStateOf("") }
-    val (showAlertDialog, setShowAlertDialog) = remember { mutableStateOf(false) }
-    val (alertMessage, setAlertMessage) = remember { mutableStateOf("") }
+    var (showAlertDialog, setShowAlertDialog) = remember { mutableStateOf(false) }
+    var (alertMessage, setAlertMessage) = remember { mutableStateOf("") }
 
     fun validateForm(): Boolean {
         val fields = mapOf("E-mail" to email)
@@ -67,11 +67,17 @@ fun ForgotPasswordScreen(navController: NavController) {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
                                 navController.navigate(RESET_PASSWORD_ROUTE)
+                            } else {
+                                alertMessage = "reset password failed"
+                                showAlertDialog=true
                             }
 
                         }
 
-                        override fun onFailure(call: Call<Void>, t: Throwable) {}
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            alertMessage = "reset password failed"
+                            showAlertDialog=true
+                        }
                     })
             } else {
                 setShowAlertDialog(true)

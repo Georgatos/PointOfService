@@ -16,33 +16,48 @@ object FormValidator {
                 "First Name", "Last Name" -> if (!Validator.isNameValid(value)) {
                     errors.add(ValidationError(field, "$field is required."))
                 }
+
                 "E-mail" -> if (!Validator.isEmailValid(value)) {
                     errors.add(ValidationError(field, "The $field is required."))
                 }
+
                 "Password" -> if (!Validator.isPasswordValid(value)) {
-                    errors.add(ValidationError(field, "The $field is required and must be 9 characters long at least."))
+                    errors.add(
+                        ValidationError(
+                            field,
+                            "The $field is required and must be 9 characters long at least."
+                        )
+                    )
                 }
+
                 "Phone Number" -> if (!Validator.isPhoneNumberValid(value)) {
                     errors.add(ValidationError(field, "The $field is required."))
                 }
+
                 "City" -> if (!Validator.isCityValid(value)) {
                     errors.add(ValidationError(field, "The $field is required."))
                 }
+
                 "Address" -> if (!Validator.isAddressValid(value)) {
                     errors.add(ValidationError(field, "The $field is required."))
                 }
+
                 "Address Number" -> if (!Validator.isAddressNumberValid(value)) {
                     errors.add(ValidationError(field, "The $field is required."))
                 }
+
                 "Story Level" -> if (!Validator.isStoryLevelValid(value)) {
                     errors.add(ValidationError(field, "The $field is required."))
                 }
+
                 "Postal Code" -> if (!Validator.isPostalCodeValid(value)) {
                     errors.add(ValidationError(field, "The $field is required."))
                 }
+
                 "Door Ring" -> if (!Validator.isDoorRingBellNameValid(value)) {
                     errors.add(ValidationError(field, "The $field is required."))
                 }
+
                 "Verification Code" -> if (!Validator.isUUIDValid(value)) {
                     errors.add(ValidationError(field, "The $field isn't correct"))
                 }

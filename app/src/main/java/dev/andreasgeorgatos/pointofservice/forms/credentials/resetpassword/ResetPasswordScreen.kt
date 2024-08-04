@@ -1,6 +1,5 @@
 package dev.andreasgeorgatos.pointofservice.forms.credentials.resetpassword
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,9 +20,9 @@ import androidx.navigation.NavController
 import dev.andreasgeorgatos.pointofservice.LOGIN_ROUTE
 import dev.andreasgeorgatos.pointofservice.data.dto.ResetPasswordDTO
 import dev.andreasgeorgatos.pointofservice.forms.TextInputField
-import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
-import dev.andreasgeorgatos.pointofservice.forms.credentials.ValidationAlertDialog
 import dev.andreasgeorgatos.pointofservice.forms.credentials.FormValidator
+import dev.andreasgeorgatos.pointofservice.forms.credentials.ValidationAlertDialog
+import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,8 +34,8 @@ fun ResetPasswordScreen(navController: NavController) {
     val (password, setPassword) = remember { mutableStateOf("") }
     val (confirmPassword, setConfirmPassword) = remember { mutableStateOf("") }
     val (token, setToken) = remember { mutableStateOf("") }
-    val (showAlertDialog, setShowAlertDialog) = remember { mutableStateOf(false) }
-    val (alertMessage, setAlertMessage) = remember { mutableStateOf("") }
+    var (showAlertDialog, setShowAlertDialog) = remember { mutableStateOf(false) }
+    var (alertMessage, setAlertMessage) = remember { mutableStateOf("") }
 
     fun validateForm(): Boolean {
         val fields = mapOf(
@@ -116,10 +115,14 @@ fun ResetPasswordScreen(navController: NavController) {
                                 if (response.isSuccessful) {
                                     navController.navigate(LOGIN_ROUTE)
                                 } else {
+                                    alertMessage = "registration failed"
+                                    showAlertDialog = true
                                 }
                             }
 
                             override fun onFailure(call: Call<Void>, t: Throwable) {
+                                alertMessage = "registration failed"
+                                showAlertDialog = true
                             }
                         })
                 } else {

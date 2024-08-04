@@ -1,5 +1,6 @@
 package dev.andreasgeorgatos.pointofservice.forms.credentials
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,14 +21,73 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import dev.andreasgeorgatos.pointofservice.ADMIN_MAIN_SCREEN
+import dev.andreasgeorgatos.pointofservice.COOK_HELPER_MAIN_SCREEN
+import dev.andreasgeorgatos.pointofservice.COOK_MAIN_SCREEN
+import dev.andreasgeorgatos.pointofservice.CUSTOMER_MAIN_SCREEN
 import dev.andreasgeorgatos.pointofservice.FORGOT_PASSWORD_ROUTE
+import dev.andreasgeorgatos.pointofservice.MANAGER_MAIN_SCREEN
 import dev.andreasgeorgatos.pointofservice.REGISTER_ROUTE
+import dev.andreasgeorgatos.pointofservice.SERVER_MAIN_SCREEN
 import dev.andreasgeorgatos.pointofservice.data.dto.CredentialsDTO
+import dev.andreasgeorgatos.pointofservice.data.dto.PermissionDTO
+import dev.andreasgeorgatos.pointofservice.data.dto.UserNameDTO
 import dev.andreasgeorgatos.pointofservice.forms.TextInputField
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+
+interface PermissionsCallback {
+    fun onPermissionsReceived(permissions: List<String>)
+}
+
+fun getAllUserPermissions(userName: String, callback: PermissionsCallback) {
+    RetrofitClient.userService.getUserPermissions(UserNameDTO(userName)).enqueue(
+        object : Callback<List<PermissionDTO>> {
+            override fun onResponse(
+                call: Call<List<PermissionDTO>>,
+                response: Response<List<PermissionDTO>>
+            ) {
+                if (response.isSuccessful) {
+                    val permissions = response.body()?.map { it.authority } ?: emptyList()
+                    callback.onPermissionsReceived(permissions)
+                } else {
+                    callback.onPermissionsReceived(emptyList())
+                }
+            }
+
+            override fun onFailure(call: Call<List<PermissionDTO>>, t: Throwable) {
+                callback.onPermissionsReceived(emptyList())
+            }
+        })
+}
+
+
+fun redirectUser(userPermissions: List<String>, navController: NavController) {
+    Log.d("Permissions", userPermissions.toString())
+    Log.d("Permissions", userPermissions.contains("ROLE_CUSTOMER").toString())
+
+    if (userPermissions.contains("ROLE_ADMIN")) {
+        navController.navigate(ADMIN_MAIN_SCREEN)
+    }
+    if (userPermissions.contains("ROLE_MANAGER")) {
+        navController.navigate(MANAGER_MAIN_SCREEN)
+    }
+    if (userPermissions.contains("ROLE_SERVER")) {
+        navController.navigate(SERVER_MAIN_SCREEN)
+    }
+    if (userPermissions.contains("ROLE_COOK")) {
+        navController.navigate(COOK_MAIN_SCREEN)
+    }
+    if (userPermissions.contains("ROLE_COOK_HELPER")) {
+        navController.navigate(COOK_HELPER_MAIN_SCREEN)
+    }
+    if (userPermissions.contains("ROLE_CUSTOMER")) {
+        navController.navigate(CUSTOMER_MAIN_SCREEN)
+    }
+}
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -80,12 +140,20 @@ fun LoginScreen(navController: NavController) {
                     .enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
-                                navController.navigate("main_screen")
+                                getAllUserPermissions(userName, object : PermissionsCallback {
+                                    override fun onPermissionsReceived(permissions: List<String>) {
+                                        redirectUser(permissions, navController)
+                                    }
+                                })
                             } else {
-
+                                alertMessage = "Login failed"
+                                showAlertDialog = true
                             }
                         }
+
                         override fun onFailure(call: Call<Void>, t: Throwable) {
+                            alertMessage = "Login failed"
+                            showAlertDialog = true
                         }
                     })
             } else {

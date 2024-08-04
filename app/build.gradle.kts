@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation (libs.nimbus.jose.jwt.v915)
     implementation(libs.retrofit)
     implementation (libs.okhttp)
     implementation(libs.converter.gson)
