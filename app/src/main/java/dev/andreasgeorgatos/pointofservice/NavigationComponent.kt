@@ -18,6 +18,14 @@ import dev.andreasgeorgatos.pointofservice.forms.mainscreen.CookMainScreen
 import dev.andreasgeorgatos.pointofservice.forms.mainscreen.CustomerMainScreen
 import dev.andreasgeorgatos.pointofservice.forms.mainscreen.ManagerMainScreen
 import dev.andreasgeorgatos.pointofservice.forms.mainscreen.ServerMainScreen
+import dev.andreasgeorgatos.pointofservice.forms.mainscreen.SystemMainScreen
+import dev.andreasgeorgatos.pointofservice.forms.management.shift.EndShiftScreen
+import dev.andreasgeorgatos.pointofservice.forms.management.shift.StartShiftScreen
+import dev.andreasgeorgatos.pointofservice.forms.management.tables.add.AddMultipleTablesScreen
+import dev.andreasgeorgatos.pointofservice.forms.management.tables.add.AddSingleTableScreen
+import dev.andreasgeorgatos.pointofservice.forms.management.tables.add.AddTablesScreen
+
+import dev.andreasgeorgatos.pointofservice.forms.management.tables.remove.RemoveTablesScreen
 
 const val LOGIN_ROUTE = "login_screen"
 const val REGISTER_ROUTE = "register_screen"
@@ -30,6 +38,13 @@ const val MANAGER_MAIN_SCREEN = "manager_main_screen"
 const val COOK_HELPER_MAIN_SCREEN = "cook_helper_main_screen"
 const val COOK_MAIN_SCREEN = "cook_main_screen"
 const val ADMIN_MAIN_SCREEN = "admin_main_screen"
+const val SYSTEM_MAIN_SCREEN = "system_main_screen"
+const val ADD_TABLES_SCREEN = "add_tables_screen"
+const val REMOVE_TABLES_SCREEN = "remove_tables_screen"
+const val START_SHIFT_SCREEN = "start_shift_screen"
+const val END_SHIFT_SCREEN = "end_shift_screen"
+const val ADD_SINGLE_TABLE_SCREEN = "add_single_table_screen"
+const val ADD_MULTIPLE_TABLE_SCREEN = "add_multiple_table_screen"
 
 @SuppressLint("NewApi")
 @Composable
@@ -49,8 +64,8 @@ fun NavigationComponent() {
         composable(RESET_PASSWORD_ROUTE) {
             ResetPasswordScreen(navController)
         }
-        composable(CUSTOMER_MAIN_SCREEN) {
-            CustomerMainScreen(navController)
+        composable(SYSTEM_MAIN_SCREEN) {
+            SystemMainScreen(navController)
         }
         composable(SERVER_MAIN_SCREEN) {
             ServerMainScreen(navController)
@@ -67,6 +82,28 @@ fun NavigationComponent() {
         composable(ADMIN_MAIN_SCREEN) {
             AdminMainScreen(navController)
         }
+        composable(CUSTOMER_MAIN_SCREEN) {
+            CustomerMainScreen(navController)
+        }
+        composable(START_SHIFT_SCREEN) {
+            StartShiftScreen(navController)
+        }
+        composable(ADD_TABLES_SCREEN) {
+            AddTablesScreen(navController)
+        }
+        composable(REMOVE_TABLES_SCREEN) {
+            RemoveTablesScreen(navController)
+        }
+        composable(END_SHIFT_SCREEN) {
+            EndShiftScreen(navController)
+        }
+        composable(ADD_SINGLE_TABLE_SCREEN) {
+            AddSingleTableScreen(navController)
+        }
+        composable(ADD_MULTIPLE_TABLE_SCREEN) {
+            AddMultipleTablesScreen(navController)
+        }
+
         composable(
             route = "$VERIFY_EMAIL_ROUTE/{email}",
             arguments = listOf(navArgument("email") { type = NavType.StringType })

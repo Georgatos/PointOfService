@@ -29,6 +29,7 @@ import dev.andreasgeorgatos.pointofservice.FORGOT_PASSWORD_ROUTE
 import dev.andreasgeorgatos.pointofservice.MANAGER_MAIN_SCREEN
 import dev.andreasgeorgatos.pointofservice.REGISTER_ROUTE
 import dev.andreasgeorgatos.pointofservice.SERVER_MAIN_SCREEN
+import dev.andreasgeorgatos.pointofservice.SYSTEM_MAIN_SCREEN
 import dev.andreasgeorgatos.pointofservice.data.dto.CredentialsDTO
 import dev.andreasgeorgatos.pointofservice.data.dto.PermissionDTO
 import dev.andreasgeorgatos.pointofservice.data.dto.UserNameDTO
@@ -86,6 +87,9 @@ fun redirectUser(userPermissions: List<String>, navController: NavController) {
     }
     if (userPermissions.contains("ROLE_CUSTOMER")) {
         navController.navigate(CUSTOMER_MAIN_SCREEN)
+    }
+    if (userPermissions.contains("ROLE_SYSTEM")) {
+        navController.navigate(SYSTEM_MAIN_SCREEN)
     }
 }
 
