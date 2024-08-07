@@ -14,4 +14,7 @@ interface TableService {
     @POST("order/DineIn/getDineInTableByNumber")
     fun getTableByTableNumber(@Body tableNumber: Long): Call<TableDTO>
 
+    @POST("order/DineIn/delete")
+    fun deleteTableByTableNumber(@Body tableNumber: Long): Call<Boolean>
+
 }

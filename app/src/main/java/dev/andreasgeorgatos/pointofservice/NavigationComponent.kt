@@ -24,6 +24,8 @@ import dev.andreasgeorgatos.pointofservice.screens.management.shift.StartShiftSc
 import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.AddMultipleTablesScreen
 import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.AddSingleTableScreen
 import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.AddTablesScreen
+import dev.andreasgeorgatos.pointofservice.screens.management.tables.remove.RemoveMultipleTableScreen
+import dev.andreasgeorgatos.pointofservice.screens.management.tables.remove.RemoveSingleTableScreen
 
 import dev.andreasgeorgatos.pointofservice.screens.management.tables.remove.RemoveTablesScreen
 
@@ -44,7 +46,9 @@ const val REMOVE_TABLES_SCREEN = "remove_tables_screen"
 const val START_SHIFT_SCREEN = "start_shift_screen"
 const val END_SHIFT_SCREEN = "end_shift_screen"
 const val ADD_SINGLE_TABLE_SCREEN = "add_single_table_screen"
+const val REMOVE_SINGLE_TABLE_SCREEN = "remove_single_table_screen"
 const val ADD_MULTIPLE_TABLE_SCREEN = "add_multiple_table_screen"
+const val REMOVE_MULTIPLE_TABLE_SCREEN = "remove_multiple_table_screen"
 
 @SuppressLint("NewApi")
 @Composable
@@ -100,8 +104,14 @@ fun NavigationComponent() {
         composable(ADD_SINGLE_TABLE_SCREEN) {
             AddSingleTableScreen(navController)
         }
+        composable(REMOVE_SINGLE_TABLE_SCREEN) {
+            RemoveSingleTableScreen(navController)
+        }
         composable(ADD_MULTIPLE_TABLE_SCREEN) {
             AddMultipleTablesScreen(navController)
+        }
+        composable(REMOVE_MULTIPLE_TABLE_SCREEN) {
+            RemoveMultipleTableScreen(navController)
         }
 
         composable(
