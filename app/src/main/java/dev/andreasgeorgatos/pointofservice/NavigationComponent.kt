@@ -8,24 +8,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import dev.andreasgeorgatos.pointofservice.forms.credentials.LoginScreen
-import dev.andreasgeorgatos.pointofservice.forms.credentials.registerform.RegisterScreen
-import dev.andreasgeorgatos.pointofservice.forms.credentials.resetpassword.ForgotPasswordScreen
-import dev.andreasgeorgatos.pointofservice.forms.credentials.resetpassword.ResetPasswordScreen
-import dev.andreasgeorgatos.pointofservice.forms.mainscreen.AdminMainScreen
-import dev.andreasgeorgatos.pointofservice.forms.mainscreen.CookHelperMainScreen
-import dev.andreasgeorgatos.pointofservice.forms.mainscreen.CookMainScreen
-import dev.andreasgeorgatos.pointofservice.forms.mainscreen.CustomerMainScreen
-import dev.andreasgeorgatos.pointofservice.forms.mainscreen.ManagerMainScreen
-import dev.andreasgeorgatos.pointofservice.forms.mainscreen.ServerMainScreen
-import dev.andreasgeorgatos.pointofservice.forms.mainscreen.SystemMainScreen
-import dev.andreasgeorgatos.pointofservice.forms.management.shift.EndShiftScreen
-import dev.andreasgeorgatos.pointofservice.forms.management.shift.StartShiftScreen
-import dev.andreasgeorgatos.pointofservice.forms.management.tables.add.AddMultipleTablesScreen
-import dev.andreasgeorgatos.pointofservice.forms.management.tables.add.AddSingleTableScreen
-import dev.andreasgeorgatos.pointofservice.forms.management.tables.add.AddTablesScreen
+import dev.andreasgeorgatos.pointofservice.screens.credentials.LoginScreen
+import dev.andreasgeorgatos.pointofservice.screens.credentials.registerform.RegisterScreen
+import dev.andreasgeorgatos.pointofservice.screens.credentials.resetpassword.ForgotPasswordScreen
+import dev.andreasgeorgatos.pointofservice.screens.credentials.resetpassword.ResetPasswordScreen
+import dev.andreasgeorgatos.pointofservice.screens.mainscreen.AdminMainScreen
+import dev.andreasgeorgatos.pointofservice.screens.mainscreen.CookHelperMainScreen
+import dev.andreasgeorgatos.pointofservice.screens.mainscreen.CookMainScreen
+import dev.andreasgeorgatos.pointofservice.screens.mainscreen.CustomerMainScreen
+import dev.andreasgeorgatos.pointofservice.screens.mainscreen.ManagerMainScreen
+import dev.andreasgeorgatos.pointofservice.screens.mainscreen.ServerMainScreen
+import dev.andreasgeorgatos.pointofservice.screens.mainscreen.SystemMainScreen
+import dev.andreasgeorgatos.pointofservice.screens.management.shift.EndShiftScreen
+import dev.andreasgeorgatos.pointofservice.screens.management.shift.StartShiftScreen
+import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.AddMultipleTablesScreen
+import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.AddSingleTableScreen
+import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.AddTablesScreen
 
-import dev.andreasgeorgatos.pointofservice.forms.management.tables.remove.RemoveTablesScreen
+import dev.andreasgeorgatos.pointofservice.screens.management.tables.remove.RemoveTablesScreen
 
 const val LOGIN_ROUTE = "login_screen"
 const val REGISTER_ROUTE = "register_screen"

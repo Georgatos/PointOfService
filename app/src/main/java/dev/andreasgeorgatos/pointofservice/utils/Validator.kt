@@ -29,7 +29,7 @@ object Validator {
         return addressNumber.isNotEmpty()
     }
 
-    fun isStoryLevelValid(storyLevel: String): Boolean {
+    fun isDigitValid(storyLevel: String): Boolean {
         return storyLevel.isNotEmpty() && storyLevel.all { it.isDigit() }
     }
 
@@ -43,5 +43,9 @@ object Validator {
 
     fun isUUIDValid(UUID: String): Boolean {
         return UUID.length == 36
+    }
+
+    fun isDigitOrCommaValid(input: String): Boolean {
+        return input.isNotEmpty() && input.all { it.isDigit() || it == ',' }
     }
 }

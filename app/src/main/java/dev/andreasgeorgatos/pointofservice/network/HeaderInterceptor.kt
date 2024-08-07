@@ -11,7 +11,6 @@ class HeaderInterceptor : Interceptor {
         private val authorizationInfo = AtomicReference<String?>(null)
     }
 
-
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         var url = request.url.toString()
