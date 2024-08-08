@@ -24,7 +24,7 @@ import dev.andreasgeorgatos.pointofservice.screens.management.shift.StartShiftSc
 import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.AddMultipleTablesScreen
 import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.AddSingleTableScreen
 import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.AddTablesScreen
-import dev.andreasgeorgatos.pointofservice.screens.management.tables.remove.RemoveMultipleTableScreen
+import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.RemoveMultipleTables
 import dev.andreasgeorgatos.pointofservice.screens.management.tables.remove.RemoveSingleTableScreen
 
 import dev.andreasgeorgatos.pointofservice.screens.management.tables.remove.RemoveTablesScreen
@@ -111,7 +111,7 @@ fun NavigationComponent() {
             AddMultipleTablesScreen(navController)
         }
         composable(REMOVE_MULTIPLE_TABLE_SCREEN) {
-            RemoveMultipleTableScreen(navController)
+            RemoveMultipleTables(navController)
         }
 
         composable(

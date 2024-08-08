@@ -1,7 +1,6 @@
 package dev.andreasgeorgatos.pointofservice.screens.management.tables.remove
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +23,7 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializer
 import dev.andreasgeorgatos.pointofservice.data.dto.tables.TableDTO
+import dev.andreasgeorgatos.pointofservice.data.dto.tables.TableNumberDTO
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
 import dev.andreasgeorgatos.pointofservice.screens.IntegerInputField
 import dev.andreasgeorgatos.pointofservice.screens.credentials.FormValidator
@@ -86,44 +86,32 @@ fun RemoveSingleTableScreen(navController: NavController) {
                     }).create()
 
 
-                RetrofitClient.tableService.getTableByTableNumber(tableNumber.toLong())
-                    .enqueue(object : Callback<TableDTO> {
-                        override fun onResponse(
-                            call: Call<TableDTO>, response: Response<TableDTO>
-                        ) {
-                            if (response.isSuccessful) {
-                                RetrofitClient.tableService.deleteTableByTableNumber(tableNumber.toLong())
-                                    .enqueue(
-                                        object : Callback<Boolean> {
-                                            override fun onResponse(
-                                                call: Call<Boolean>,
-                                                response: Response<Boolean>
-                                            ) {
-                                                alertMessage = "Successfully deleted the table."
-                                                showAlertDialog = true
-                                            }
+                RetrofitClient.tableService.deleteTableByTableNumber(TableNumberDTO(tableNumber.toLong()))
+                    .enqueue(
+                        object : Callback<TableDTO> {
 
-                                            override fun onFailure(
-                                                call: Call<Boolean>,
-                                                t: Throwable
-                                            ) {
-                                                alertMessage = "Failed to delete the table."
-                                                showAlertDialog = true
-                                            }
-                                        })
-                            } else {
-                                alertMessage = "Table doesn't exist."
+                            override fun onResponse(
+                                call: Call<TableDTO>,
+                                response: Response<TableDTO>
+                            ) {
+                                if (response.isSuccessful) {
+                                    alertMessage = "Successfully deleted the table."
+                                    showAlertDialog = true
+                                } else {
+                                    val errorResponse =
+                                        response.errorBody()?.string() ?: "Unknown error"
+                                    alertMessage = errorResponse
+                                    showAlertDialog = true
+                                }
+                            }
+
+                            override fun onFailure(call: Call<TableDTO>, t: Throwable) {
+                                val errorResponse = t.message ?: "Unknown error"
+                                alertMessage = errorResponse
                                 showAlertDialog = true
                             }
-                        }
+                        })
 
-                        override fun onFailure(call: Call<TableDTO>, t: Throwable) {
-                            alertMessage = "Failed to enquire the database. ${t.cause}"
-                            Log.d("API Response", t.message.toString())
-                            showAlertDialog = true
-                        }
-
-                    })
             } else {
                 showAlertDialog = true
             }

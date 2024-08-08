@@ -1,6 +1,7 @@
 package dev.andreasgeorgatos.pointofservice.network.grud
 
 import dev.andreasgeorgatos.pointofservice.data.dto.tables.TableDTO
+import dev.andreasgeorgatos.pointofservice.data.dto.tables.TableNumberDTO
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -14,7 +15,7 @@ interface TableService {
     @POST("order/DineIn/getDineInTableByNumber")
     fun getTableByTableNumber(@Body tableNumber: Long): Call<TableDTO>
 
-    @POST("order/DineIn/delete")
-    fun deleteTableByTableNumber(@Body tableNumber: Long): Call<Boolean>
+    @POST("order/DineIn/deleteTableByNumber")
+    fun deleteTableByTableNumber(@Body tableNumber: TableNumberDTO): Call<TableDTO>
 
 }
