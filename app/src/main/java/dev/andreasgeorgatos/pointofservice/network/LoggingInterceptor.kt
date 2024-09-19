@@ -13,9 +13,6 @@ class LoggingInterceptor : Interceptor {
 
         val responseBody = response.body
         val responseBodyString = responseBody?.string()
-        Log.e("API Response", "Error response: $responseBodyString")
-
-        // To not consume the response body, we need to create a new response body and replace it
         val newResponseBody =
             ResponseBody.create(responseBody?.contentType(), responseBodyString ?: "")
         return response.newBuilder().body(newResponseBody).build()

@@ -1,5 +1,6 @@
 import dev.andreasgeorgatos.pointofservice.data.dto.user.CredentialsDTO
 import dev.andreasgeorgatos.pointofservice.data.dto.user.EmailDTO
+import dev.andreasgeorgatos.pointofservice.data.dto.user.EmployeeDTO
 import dev.andreasgeorgatos.pointofservice.data.dto.user.PermissionDTO
 import dev.andreasgeorgatos.pointofservice.data.dto.user.ResetPasswordDTO
 import dev.andreasgeorgatos.pointofservice.data.dto.user.UserNameDTO
@@ -7,6 +8,7 @@ import dev.andreasgeorgatos.pointofservice.data.dto.user.VerificationDTO
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface UserService {
@@ -27,4 +29,7 @@ interface UserService {
 
     @POST("users/getPermissions")
     fun getUserPermissions(@Body userNameDTO: UserNameDTO): Call<List<PermissionDTO>>
+
+    @GET("users/getAllEmployees")
+    fun getAllEmployees(): Call<Map<Long, EmployeeDTO>>
 }

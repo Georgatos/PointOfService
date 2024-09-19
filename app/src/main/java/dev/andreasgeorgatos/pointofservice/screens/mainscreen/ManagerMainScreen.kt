@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import dev.andreasgeorgatos.pointofservice.ADD_TABLES_SCREEN
 import dev.andreasgeorgatos.pointofservice.REMOVE_TABLES_SCREEN
+import dev.andreasgeorgatos.pointofservice.START_SHIFT_SCREEN
 
 
 @Composable
@@ -43,7 +44,7 @@ fun ManagerMainScreen(navController: NavController) {
             }
         }
         Row(modifier = Modifier.fillMaxWidth()) {
-            Button(onClick = { /*TODO*/ }, Modifier.weight(1f)) {
+            Button(onClick = { navController.navigate(START_SHIFT_SCREEN) }, Modifier.weight(1f)) {
                 Text(text = "Start shift")
             }
             Button(onClick = { /*TODO*/ }, Modifier.weight(1f)) {

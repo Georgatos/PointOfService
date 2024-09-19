@@ -106,7 +106,6 @@ fun AddSingleTableScreen(navController: NavController) {
                                             call: Call<Void>, response: Response<Void>
                                         ) {
                                             if (response.isSuccessful) {
-                                                Log.d("API Response", response.body().toString())
                                                 alertMessage = "Table has been created."
                                                 showAlertDialog = true
                                                 navController.navigate(MANAGER_MAIN_SCREEN)
@@ -120,7 +119,6 @@ fun AddSingleTableScreen(navController: NavController) {
 
                                         override fun onFailure(call: Call<Void>, t: Throwable) {
                                             alertMessage = "Registration failed: ${t.message}"
-                                            Log.d("API Response", t.message.toString())
                                             showAlertDialog = true
                                         }
                                     })
@@ -129,7 +127,6 @@ fun AddSingleTableScreen(navController: NavController) {
 
                         override fun onFailure(call: Call<TableDTO>, t: Throwable) {
                             alertMessage = "Failed to enquire the database. ${t.cause}"
-                            Log.d("API Response", t.message.toString())
                             showAlertDialog = true
                         }
 
@@ -142,6 +139,5 @@ fun AddSingleTableScreen(navController: NavController) {
                 text = "Add a single table", fontSize = 20.sp
             )
         }
-
     }
 }
