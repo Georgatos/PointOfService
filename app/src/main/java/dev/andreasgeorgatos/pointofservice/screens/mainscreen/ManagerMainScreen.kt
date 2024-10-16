@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import dev.andreasgeorgatos.pointofservice.ADD_TABLES_SCREEN
 import dev.andreasgeorgatos.pointofservice.REMOVE_TABLES_SCREEN
+import dev.andreasgeorgatos.pointofservice.SHOW_ALL_EMPLOYEES_SCREEN
 import dev.andreasgeorgatos.pointofservice.START_SHIFT_SCREEN
 
 
@@ -49,6 +50,11 @@ fun ManagerMainScreen(navController: NavController) {
             }
             Button(onClick = { /*TODO*/ }, Modifier.weight(1f)) {
                 Text(text = "End shift")
+            }
+        }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { navController.navigate(SHOW_ALL_EMPLOYEES_SCREEN) }, Modifier.weight(1f)) {
+                Text(text = "Show all employees IDs")
             }
         }
     }

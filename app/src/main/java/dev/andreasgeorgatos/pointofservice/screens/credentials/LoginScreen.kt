@@ -1,6 +1,5 @@
 package dev.andreasgeorgatos.pointofservice.screens.credentials
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +34,8 @@ import dev.andreasgeorgatos.pointofservice.data.dto.user.PermissionDTO
 import dev.andreasgeorgatos.pointofservice.data.dto.user.UserNameDTO
 import dev.andreasgeorgatos.pointofservice.screens.TextInputField
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
+import dev.andreasgeorgatos.pointofservice.utils.FormValidator
+import dev.andreasgeorgatos.pointofservice.utils.ValidationAlertDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

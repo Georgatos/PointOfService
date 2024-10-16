@@ -1,7 +1,6 @@
 package dev.andreasgeorgatos.pointofservice.screens.management.tables.add
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,8 +25,8 @@ import dev.andreasgeorgatos.pointofservice.MANAGER_MAIN_SCREEN
 import dev.andreasgeorgatos.pointofservice.data.dto.tables.TableDTO
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
 import dev.andreasgeorgatos.pointofservice.screens.IntegerWithCommaInputField
-import dev.andreasgeorgatos.pointofservice.screens.credentials.FormValidator
-import dev.andreasgeorgatos.pointofservice.screens.credentials.ValidationAlertDialog
+import dev.andreasgeorgatos.pointofservice.utils.FormValidator
+import dev.andreasgeorgatos.pointofservice.utils.ValidationAlertDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call

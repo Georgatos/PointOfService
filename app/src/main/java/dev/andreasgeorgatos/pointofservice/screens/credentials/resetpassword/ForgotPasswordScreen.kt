@@ -20,8 +20,8 @@ import dev.andreasgeorgatos.pointofservice.RESET_PASSWORD_ROUTE
 import dev.andreasgeorgatos.pointofservice.data.dto.user.EmailDTO
 import dev.andreasgeorgatos.pointofservice.screens.TextInputField
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
-import dev.andreasgeorgatos.pointofservice.screens.credentials.ValidationAlertDialog
-import dev.andreasgeorgatos.pointofservice.screens.credentials.FormValidator
+import dev.andreasgeorgatos.pointofservice.utils.ValidationAlertDialog
+import dev.andreasgeorgatos.pointofservice.utils.FormValidator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

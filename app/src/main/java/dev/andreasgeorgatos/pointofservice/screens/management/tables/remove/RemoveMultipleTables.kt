@@ -25,8 +25,8 @@ import dev.andreasgeorgatos.pointofservice.data.dto.tables.TableDTO
 import dev.andreasgeorgatos.pointofservice.data.dto.tables.TableNumberDTO
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
 import dev.andreasgeorgatos.pointofservice.screens.IntegerWithCommaInputField
-import dev.andreasgeorgatos.pointofservice.screens.credentials.FormValidator
-import dev.andreasgeorgatos.pointofservice.screens.credentials.ValidationAlertDialog
+import dev.andreasgeorgatos.pointofservice.utils.FormValidator
+import dev.andreasgeorgatos.pointofservice.utils.ValidationAlertDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

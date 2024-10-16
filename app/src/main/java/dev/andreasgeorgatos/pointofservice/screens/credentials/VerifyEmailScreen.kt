@@ -19,8 +19,8 @@ import androidx.navigation.NavController
 import dev.andreasgeorgatos.pointofservice.LOGIN_ROUTE
 import dev.andreasgeorgatos.pointofservice.data.dto.user.VerificationDTO
 import dev.andreasgeorgatos.pointofservice.screens.TextInputField
-import dev.andreasgeorgatos.pointofservice.screens.credentials.FormValidator
-import dev.andreasgeorgatos.pointofservice.screens.credentials.ValidationAlertDialog
+import dev.andreasgeorgatos.pointofservice.utils.FormValidator
+import dev.andreasgeorgatos.pointofservice.utils.ValidationAlertDialog
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback

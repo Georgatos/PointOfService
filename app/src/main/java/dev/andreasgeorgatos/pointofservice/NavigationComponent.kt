@@ -19,6 +19,7 @@ import dev.andreasgeorgatos.pointofservice.screens.mainscreen.CustomerMainScreen
 import dev.andreasgeorgatos.pointofservice.screens.mainscreen.ManagerMainScreen
 import dev.andreasgeorgatos.pointofservice.screens.mainscreen.ServerMainScreen
 import dev.andreasgeorgatos.pointofservice.screens.mainscreen.SystemMainScreen
+import dev.andreasgeorgatos.pointofservice.screens.management.employees.ShowAllEmployeesScreen
 import dev.andreasgeorgatos.pointofservice.screens.management.shift.EndShiftScreen
 import dev.andreasgeorgatos.pointofservice.screens.management.shift.StartShiftScreen
 import dev.andreasgeorgatos.pointofservice.screens.management.tables.add.AddMultipleTablesScreen
@@ -49,6 +50,7 @@ const val ADD_SINGLE_TABLE_SCREEN = "add_single_table_screen"
 const val REMOVE_SINGLE_TABLE_SCREEN = "remove_single_table_screen"
 const val ADD_MULTIPLE_TABLE_SCREEN = "add_multiple_table_screen"
 const val REMOVE_MULTIPLE_TABLE_SCREEN = "remove_multiple_table_screen"
+const val SHOW_ALL_EMPLOYEES_SCREEN = "show_all_employees_screen"
 
 @SuppressLint("NewApi")
 @Composable
@@ -112,6 +114,9 @@ fun NavigationComponent() {
         }
         composable(REMOVE_MULTIPLE_TABLE_SCREEN) {
             RemoveMultipleTables(navController)
+        }
+        composable(SHOW_ALL_EMPLOYEES_SCREEN) {
+            ShowAllEmployeesScreen(navController)
         }
 
         composable(

@@ -24,8 +24,8 @@ import dev.andreasgeorgatos.pointofservice.LOGIN_ROUTE
 import dev.andreasgeorgatos.pointofservice.VERIFY_EMAIL_ROUTE
 import dev.andreasgeorgatos.pointofservice.data.dto.user.UserDTO
 import dev.andreasgeorgatos.pointofservice.screens.TextInputField
-import dev.andreasgeorgatos.pointofservice.screens.credentials.FormValidator
-import dev.andreasgeorgatos.pointofservice.screens.credentials.ValidationAlertDialog
+import dev.andreasgeorgatos.pointofservice.utils.FormValidator
+import dev.andreasgeorgatos.pointofservice.utils.ValidationAlertDialog
 import dev.andreasgeorgatos.pointofservice.network.RetrofitClient
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -49,8 +49,9 @@ fun RegisterScreen(navController: NavController) {
     val (userName, setUserName) = remember { mutableStateOf("")}
     val (email, setEmail) = remember { mutableStateOf("") }
     val (city, setCity) = remember { mutableStateOf("") }
-    val (address, setAddress) = remember { mutableStateOf("") }
-    val (addressNumber, setAddressNumber) = remember { mutableStateOf("") }
+    val (country, setCountry) = remember { mutableStateOf("") }
+    val (street, setStreet) = remember { mutableStateOf("") }
+    val (number, setNumber) = remember { mutableStateOf("") }
     val (storyLevel, setStoryLevel) = remember { mutableStateOf("") }
     val (postalCode, setPostalCode) = remember { mutableStateOf("") }
     val (doorRingBellName, setDoorRingBellName) = remember { mutableStateOf("") }
@@ -65,15 +66,17 @@ fun RegisterScreen(navController: NavController) {
         val fields = mapOf(
             "First Name" to firstName,
             "Last Name" to lastName,
-            "E-mail" to email,
             "Password" to password,
+            "StringData" to userName,
+            "E-mail" to email,
+            "Country" to country,
             "Phone Number" to phoneNumber,
             "City" to city,
-            "Address" to address,
-            "Address Number" to addressNumber,
-            "Story Level" to storyLevel,
-            "Postal Code" to postalCode,
-            "Door Ring" to doorRingBellName
+            "Street" to street,
+            "Number" to number,
+            "Story level" to storyLevel,
+            "Postal code" to postalCode,
+            "Doorbell Name" to doorRingBellName
         )
         val errors = FormValidator.validate(fields)
 
@@ -170,15 +173,21 @@ fun RegisterScreen(navController: NavController) {
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             TextInputField(
-                value = address,
-                onValueChange = setAddress,
-                label = "Address",
+                value = street,
+                onValueChange = setStreet,
+                label = "Street",
                 modifier = Modifier.weight(2f)
             )
             TextInputField(
-                value = addressNumber,
-                onValueChange = setAddressNumber,
-                label = "No.",
+                value = number,
+                onValueChange = setNumber,
+                label = "Number",
+                modifier = Modifier.weight(1f)
+            )
+            TextInputField(
+                value = country,
+                onValueChange = setCountry,
+                label = "Country",
                 modifier = Modifier.weight(1f)
             )
         }
@@ -234,25 +243,23 @@ fun RegisterScreen(navController: NavController) {
                 val user = UserDTO(
                     firstName = firstName,
                     lastName = lastName,
-                    password = password,
                     userName = userName,
+                    password = password,
                     email = email,
+                    country = country,
                     city = city,
-                    address = address,
-                    addressNumber = addressNumber.toLongOrNull() ?: 0L,
+                    street = street,
                     postalCode = postalCode,
-                    storyLevel = storyLevel.toLongOrNull() ?: 0L,
                     doorRingBellName = doorRingBellName,
                     phoneNumber = phoneNumber,
+                    number = number,
+                    storyLevel = storyLevel.toLongOrNull() ?: 0L,
                     birthDate = birthDate
                 )
 
                 val gson = GsonBuilder()
                     .registerTypeAdapter(LocalDate::class.java, JsonSerializer<LocalDate> { src, _, _ ->
                         JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                    })
-                    .registerTypeAdapter(LocalDate::class.java, JsonDeserializer { json, _, _ ->
-                        LocalDate.parse(json.asString, DateTimeFormatter.ISO_LOCAL_DATE)
                     })
                     .create()
 

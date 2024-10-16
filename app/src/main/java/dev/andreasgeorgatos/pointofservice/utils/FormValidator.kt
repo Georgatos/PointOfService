@@ -1,11 +1,10 @@
-package dev.andreasgeorgatos.pointofservice.screens.credentials
+package dev.andreasgeorgatos.pointofservice.utils
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import dev.andreasgeorgatos.pointofservice.data.ValidationError
-import dev.andreasgeorgatos.pointofservice.utils.Validator
 
 object FormValidator {
     fun validate(fields: Map<String, String>): List<ValidationError> {
@@ -13,12 +12,8 @@ object FormValidator {
 
         fields.forEach { (field, value) ->
             when (field) {
-                "First Name", "Last Name" -> if (!Validator.isNameValid(value)) {
-                    errors.add(ValidationError(field, "$field is required."))
-                }
-
                 "E-mail" -> if (!Validator.isEmailValid(value)) {
-                    errors.add(ValidationError(field, "The $field is required."))
+                    errors.add(ValidationError(field, "The $field is required and must be of type e-mail."))
                 }
 
                 "Password" -> if (!Validator.isPasswordValid(value)) {
@@ -30,39 +25,23 @@ object FormValidator {
                 }
 
                 "Phone Number" -> if (!Validator.isPhoneNumberValid(value)) {
-                    errors.add(ValidationError(field, "The $field is required."))
+                    errors.add(ValidationError(field, "The $field is required and must be 10 character long."))
                 }
 
-                "City" -> if (!Validator.isCityValid(value)) {
-                    errors.add(ValidationError(field, "The $field is required."))
+                "Digit", "Number", "Story level", "Postal code" -> if (!Validator.isDigitValid(value)) {
+                    errors.add(ValidationError(field, "The $field is required and must be a number."))
                 }
 
-                "Address" -> if (!Validator.isAddressValid(value)) {
-                    errors.add(ValidationError(field, "The $field is required."))
-                }
-
-                "Address Number" -> if (!Validator.isAddressNumberValid(value)) {
-                    errors.add(ValidationError(field, "The $field is required."))
-                }
-
-                "Digit" -> if (!Validator.isDigitValid(value)) {
-                    errors.add(ValidationError(field, "The $field is required."))
-                }
-
-                "Postal Code" -> if (!Validator.isPostalCodeValid(value)) {
-                    errors.add(ValidationError(field, "The $field is required."))
-                }
-
-                "Door Ring" -> if (!Validator.isDoorRingBellNameValid(value)) {
+                "First Name", "Last Name", "Country", "City", "Street", "Doorbell Name" -> if (!Validator.isStringValid(value)) {
                     errors.add(ValidationError(field, "The $field is required."))
                 }
 
                 "Verification Code" -> if (!Validator.isUUIDValid(value)) {
-                    errors.add(ValidationError(field, "The $field isn't correct"))
+                    errors.add(ValidationError(field, "The $field isn't correct, please check your e-mail, it's a UUID."))
                 }
 
                 "Digit Or Comma" -> if (!Validator.isDigitOrCommaValid(value)) {
-                    errors.add(ValidationError(field, "The $field isn't correct"))
+                    errors.add(ValidationError(field, "The $field isn't correct, must be a digit or a digit followed by comma."))
                 }
             }
         }
